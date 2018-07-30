@@ -1,0 +1,18 @@
+plothis <- function(A) {
+	table1<-read.delim(A, header=FALSE, sep=";")
+	red<-table1[22:nrow(table1), 9]
+	green<-table1[22:nrow(table1),10]
+	greenfrom405<-table1[22:nrow(table1),7]
+	red<-as.numeric(as.vector(red))
+	green<-as.numeric(as.vector(green))
+	greenfrom405<-as.numeric(as.vector(greenfrom405))
+	
+	dat<-data.frame(red, green, greenfrom405)
+	#p1<-red[3]
+	p1 <- ggplot(dat, aes(x=red)) + geom_histogram(binwidth=0.05, fill="white", color = "blue") + xlim(0,5) + ylim(0,2000)+ scale_y_log10() + theme_light()
+	p2 <- ggplot(dat, aes(x=green)) + geom_histogram(binwidth=0.05, fill="white", color = "blue") + xlim(0,6) + ylim(0,2000)+ scale_y_log10() + theme_light()
+	p3 <- ggplot(dat, aes(x=greenfrom405)) + geom_histogram(binwidth=0.05, fill="white", color = "blue") + xlim(0,5) + ylim(0,2000)+ scale_y_log10() + theme_light()
+	p4 <- ggplot(dat, aes(x=red, y=green)) + geom_point(size=0.7, shape=21, color="blue") + xlim(0,7) + ylim(0,7)+ theme_light()	
+	return(list(dat,p1, p2, p3, p4))
+	#return(p1)	
+}
