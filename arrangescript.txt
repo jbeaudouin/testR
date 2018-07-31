@@ -1,0 +1,81 @@
+
+
+#create a blank plot to create empty spaces in layouts
+df <- data.frame()
+gblank <- ggplot(df) + theme_void()
+ 
+
+#create a blank plot with text for layouts
+tx <- c(2.5, 2.5, 2.5, 2.5)
+ty <- c(4, 3, 2, 1)
+tt<- c("2018-07-09", "no fusion", "green/red ratio", "corrected")
+dfblank <- data.frame(tx, ty, tt)
+gblankt <- ggplot(dfblank, aes(tx, ty, label = tt)) + xlim(0,5)+ ylim(0,5) + theme_void() + geom_text(size=4) + theme(axis.line=element_blank(),axis.text.x=element_blank(),
+axis.text.y=element_blank(),axis.ticks=element_blank(),axis.title.x=element_blank(),axis.title.y=element_blank())
+
+#create a blank plot with text for layouts with grobTree
+date = grobTree(textGrob("2018-07-09", x=0.6,  y=0.85, hjust=0.5,gp=gpar(fontsize=18,fontface="bold")))
+construct = grobTree(textGrob("no fusion", x=0.6,  y=0.7, hjust=0.5,gp=gpar(fontsize=18,fontface="bold")))
+plottype = grobTree(textGrob("green/red ratio", x=0.6,  y=0.55, hjust=0.5,gp=gpar(fontsize=18,fontface="bold")))
+comment = grobTree(textGrob(" non corrected", x=0.6,  y=0.4, hjust=0.5,gp=gpar(fontsize=18,fontface="bold")))
+df <- data.frame()
+gblank <- ggplot(df) + annotation_custom(date)+ annotation_custom(construct)+ annotation_custom(plottype)+ annotation_custom(comment) + theme_void()
+
+
+#create layouts for histograms or scatter plots. Data are in plots_histo.RData
+date = grobTree(textGrob("2018-07-09", x=0.6,  y=0.85, hjust=0.5,gp=gpar(fontsize=18,fontface="bold")))
+construct = grobTree(textGrob("calnexin", x=0.6,  y=0.7, hjust=0.5,gp=gpar(fontsize=18,fontface="bold")))
+plottype = grobTree(textGrob("scatter plot", x=0.6,  y=0.55, hjust=0.5,gp=gpar(fontsize=18,fontface="bold")))
+comment = grobTree(textGrob("", x=0.6,  y=0.4, hjust=0.5,gp=gpar(fontsize=18,fontface="bold")))
+df <- data.frame()
+gblank <- ggplot(df) + annotation_custom(date)+ annotation_custom(construct)+ annotation_custom(plottype)+ annotation_custom(comment) + theme_void()
+l<-5
+ggarrange(res[["cg"]][[l]] + xlab("") + annotation_custom(mGFP),
+res[["csfg"]][[l]] + xlab("") + ylab("") + annotation_custom(sfGFP),
+res[["cd2"]][[l]] + xlab("") + annotation_custom(Dendra2),
+res[["cmoxd2"]][[l]] + xlab("") + ylab("") + annotation_custom(moxDendra2),
+res[["ce2"]][[l]] + xlab("") + annotation_custom(mEos2),
+res[["ce32"]][[l]] + xlab("") + ylab("") + annotation_custom(mEos32),
+res[["ce4"]][[l]] + xlab("") + ylab("") + annotation_custom(mEos4), ncol=2, nrow=4)
+
+ggarrange(dg[[l]] +ylim(0.1,5000) +scale_y_log10() + xlab("") + annotate("text", x=4, y=300, label = "mGFP"),
+dsfg[[l]]+ylim(0.1,5000)  +scale_y_log10()  + xlab("") + ylab("") + annotate("text", x=4, y=300, label = "sfGFP"), gblankt,
+dd2[[l]] +ylim(0.1,5000) +scale_y_log10()  + xlab("") + annotate("text", x=4, y=300, label = "Dendra2"),
+dmoxd2[[l]] +ylim(0.1,5000)  +scale_y_log10() + xlab("") + ylab("") +annotate("text", x=4, y=300, label = "moxDendra2"), gblank,
+de2[[l]] +ylim(0.1,5000) +scale_y_log10()  + xlab("") + annotate("text", x=4, y=300, label = "mEos2"),
+de32[[l]] +ylim(0.1,5000)  +scale_y_log10() + xlab("") + ylab("") + annotate("text", x=4, y=300, label = "mEos3.2"),
+de4[[l]]+ylim(0.1,5000) +scale_y_log10()  + xlab("") + ylab("") + annotate("text", x=4, y=300, label = "mEos4"), ncol=3, nrow=3)
+
+mGFP = grobTree(textGrob("mGFP", x=0.95,  y=0.15, hjust=1))
+sfGFP = grobTree(textGrob("sfGFP", x=0.95,  y=0.15, hjust=1))
+Dendra2 = grobTree(textGrob("Dendra2", x=0.95,  y=0.15, hjust=1))
+moxDendra2 = grobTree(textGrob("moxDendra2", x=0.95,  y=0.15, hjust=1))
+mEos2 = grobTree(textGrob("mEos2", x=0.95,  y=0.15, hjust=1))
+mEos32 = grobTree(textGrob("meos3.2", x=0.95,  y=0.15, hjust=1))
+mEos4 = grobTree(textGrob("meos4", x=0.95,  y=0.15, hjust=1))
+
+#complete block for page with bloplots of ratio
+date = grobTree(textGrob("2018-07-09", x=0.6,  y=0.85, hjust=0.5,gp=gpar(fontsize=18,fontface="plain")))
+construct = grobTree(textGrob("calnexin", x=0.6,  y=0.7, hjust=0.5,gp=gpar(fontsize=18,fontface="bold")))
+plottype = grobTree(textGrob("green/red ratio", x=0.6,  y=0.55, hjust=0.5,gp=gpar(fontsize=18,fontface="plain")))
+comment = grobTree(textGrob("corrected", x=0.6,  y=0.4, hjust=0.5,gp=gpar(fontsize=18,fontface="plain")))
+df <- data.frame()
+gblank <- ggplot(df) + annotation_custom(date)+ annotation_custom(construct)+ annotation_custom(plottype)+ annotation_custom(comment) + theme_void()
+l<-7
+ggarrange(res[["cg"]][[l]] + ylab("ratio") + theme(axis.title.y = element_text(size=16,margin = margin(r = 5), angle=90)) + ylim(0,2.5)  + annotation_custom(mGFP) ,
+res[["csfg"]][[l]] + ylim(0,3.5) + annotation_custom(sfGFP) , 
+res[["cd2"]][[l]] + ylab("ratio") + theme(axis.title.y = element_text(size=16,margin = margin(r = 5), angle = 90)) + annotation_custom(Dendra2),
+res[["cmoxd2"]][[l]] + annotation_custom(moxDendra2), 
+res[["ce2"]][[l]] + ylab("ratio") + theme(axis.title.y = element_text(size=16,margin = margin(r = 5), angle = 90))+ annotation_custom(mEos2),
+res[["ce32"]][[l]] + annotation_custom(mEos32),
+res[["ce4"]][[l]] + ylab("ratio") + theme(axis.title.y = element_text(size=16,margin = margin(r = 5), angle = 90))+ annotation_custom(mEos4), gblank,ncol=2, nrow=4)
+
+
+ 
+ #plot scatter plot density
+ df <- data.frame(x = green, y = red,d = densCols(green, red, nbin=512, colramp = colorRampPalette(rev(rainbow(50, start=0.0, end = 0.66)))))
+ p <- ggplot(df) + geom_point(aes(x, y, col = d), size = 0.5) + scale_color_identity() + theme_bw()
+
+ 
+names(res1) <- c("se2", "se32", "dd2", "dmoxd2", "de2", "de32", "ssfg", "dsfg", "ce2", "sd2", "de4", "dg", "cg",  
+"cd2", "ce4", "csfg", "cmoxd2", "ce32", "gg", "gsfg", "gd2", "ge4", "gmoxd2", "ge2", "ge32", "sg", "se4", "smoxd2")

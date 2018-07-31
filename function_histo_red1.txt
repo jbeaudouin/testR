@@ -1,0 +1,49 @@
+plothis <- function(A) {
+	table1<-read.delim(A, header=FALSE, sep=";")
+	red<-table1[22:nrow(table1), 9]
+	green<-table1[22:nrow(table1),10]
+	greenfrom405<-table1[22:nrow(table1),7]
+	red<-as.numeric(as.vector(red))
+	green<-as.numeric(as.vector(green))
+	greenfrom405<-as.numeric(as.vector(greenfrom405))
+	
+	dat<-data.frame(red, green, greenfrom405)
+	green1<-green[red<0.75]
+	red1<-red[red<0.75]
+	red1<-red1[green<0.75]
+	green1<-green1[green<0.75]
+	df1<-data.frame(red1, green1)
+	regr<-lm(green1 ~ red1, data = df1)
+	offset <- regr[[1]][1]
+	slope <- regr[[1]][2]
+	red2 <- red + (offset/slope)
+	ct<-4
+	vec<-c(0:24)/4
+	vec1<-as.character(vec)
+	redap<-factor((floor(red2*ct))/ct, levels=vec1)
+	ratio<-green/red2
+	df2<-data.frame(ratio, red2, redap)
+	lvls <- levels(df2$redap)
+	aspectr<-0.8
+	pcor <- ggplot(df2, aes(x=redap, y=ratio)) + geom_boxplot()+ labs(x="H2B-mCherry", y="green/red ratio") +
+		theme(axis.title.x = element_text(size=15, margin = margin(t=6)),axis.title.y = element_text(size=15, margin  = margin(r=7)), axis.text.y = element_text(size=15,margin = margin(r = 5)), axis.text.x = element_text(size = 16, margin = margin(t = 5)),aspect.ratio = aspectr) + 
+		ylim(0,1.5)+scale_x_discrete(limits=vec1, breaks=lvls[seq(1,length(lvls),by=4)])
+	redap1<-factor((floor(red*ct))/ct, levels=vec1)
+	ratio1<-green/red
+	df3<-data.frame(ratio1, redap1)
+	lvls1 <- levels(df3$redap1)
+	puncor <- ggplot(df3, aes(x=redap1, y=ratio1)) + geom_boxplot()+ labs(x="H2B-mCherry", y="green/red ratio") + 
+		theme(axis.title.x = element_text(size=15, margin = margin(t = 6)),axis.title.y = element_text(size=15, margin = margin(r = 7)), axis.text.y = element_text(size=15,margin = margin(r = 5)), axis.text.x = element_text(size = 16, margin = margin(t = 5)),aspect.ratio = aspectr) + 
+		ylim(0,1.5)+scale_x_discrete(limits=vec1, breaks=lvls1[seq(1,length(lvls1),by=4)])
+	
+	p5<- ggplot(df2, aes(x = ratio, y = redap, fill = ..x..)) + geom_density_ridges_gradient(scale=4)+xlim(0,2) +scale_fill_viridis(name="ratio", option = "C")
+
+	
+	
+	p1 <- ggplot(dat, aes(x=red)) + geom_histogram(binwidth=0.05, fill="white", color = "blue") + xlim(0,5) + scale_y_log10() + theme_light()
+	p2 <- ggplot(dat, aes(x=green)) + geom_histogram(binwidth=0.05, fill="white", color = "blue") + xlim(0,6) + scale_y_log10() + theme_light()
+	p3 <- ggplot(dat, aes(x=greenfrom405)) + geom_histogram(binwidth=0.05, fill="white", color = "blue") + xlim(0,5) + scale_y_log10() + theme_light()
+	p4 <- ggplot(dat, aes(x=red, y=green)) + geom_point(size=0.7, shape=21, color="blue") + xlim(0,7) + ylim(0,7)+ theme_light()	
+	return(list(dat,p1, p2, p3, p4, puncor, pcor, p5, df2))
+	}
+
